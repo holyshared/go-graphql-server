@@ -15,3 +15,15 @@ go run github.com/99designs/gqlgen init
 ```shell
 go run server.go
 ```
+
+## Add magic comment to resolver.go
+
+```golang
+//go:generate go run github.com/99designs/gqlgen
+
+package graph
+```
+
+```shell
+go generate ./...
+```
