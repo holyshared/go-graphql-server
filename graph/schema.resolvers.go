@@ -15,14 +15,13 @@ import (
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	db := domain.Connection()
 	ormTodo := &domain.Todo{
 		ID:     fmt.Sprintf("T%d", rand.Int()),
 		Text:   input.Text,
 		Done:   false,
 		UserID: input.UserID,
 	}
-	db.Create(ormTodo)
+	r.DataStore.Create(ormTodo)
 
 	todo := &model.Todo{
 		Text:   ormTodo.Text,
@@ -36,8 +35,8 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	var todos []domain.Todo
 	dtoTodos := []*model.Todo{}
-	db := domain.Connection()
-	db.Find(&todos)
+
+	r.DataStore.Find(&todos)
 
 	for _, t := range todos {
 		dtoTodos = append(dtoTodos, &model.Todo{
