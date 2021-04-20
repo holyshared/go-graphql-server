@@ -9,11 +9,14 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/holyshared/go-graphql-server/graph"
 	"github.com/holyshared/go-graphql-server/graph/generated"
+	"github.com/holyshared/go-graphql-server/model"
 )
 
 const defaultPort = "8080"
 
 func main() {
+	model.AutoMigrate()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort

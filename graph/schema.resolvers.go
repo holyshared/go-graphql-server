@@ -8,21 +8,47 @@ import (
 	"fmt"
 	"math/rand"
 
+	domain "github.com/holyshared/go-graphql-server/model"
+
 	"github.com/holyshared/go-graphql-server/graph/generated"
 	"github.com/holyshared/go-graphql-server/graph/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	todo := &model.Todo{
-		Text:   input.Text,
+	db := domain.Connection()
+	ormTodo := &domain.Todo{
 		ID:     fmt.Sprintf("T%d", rand.Int()),
-		UserID: input.UserID, // fix this line
+		Text:   input.Text,
+		Done:   false,
+		UserID: input.UserID,
+	}
+	db.Create(ormTodo)
+
+	todo := &model.Todo{
+		Text:   ormTodo.Text,
+		ID:     ormTodo.ID,
+		UserID: ormTodo.UserID,
 	}
 	r.todos = append(r.todos, todo)
 	return todo, nil
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+	var todos []domain.Todo
+	dtoTodos := []*model.Todo{}
+	db := domain.Connection()
+	db.Find(&todos)
+
+	for _, t := range todos {
+		dtoTodos = append(dtoTodos, &model.Todo{
+			ID:     t.ID,
+			Text:   t.Text,
+			Done:   t.Done,
+			UserID: t.UserID,
+		})
+	}
+	r.todos = dtoTodos
+
 	return r.todos, nil
 }
 
