@@ -4,5 +4,5 @@ type Todo struct {
 	ID     string `json:"id"`
 	Text   string `json:"text"`
 	Done   bool   `json:"done"`
-	UeerID string `json:"user"`
+	UserID string `json:"user"`
 }
