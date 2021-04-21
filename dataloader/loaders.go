@@ -1,6 +1,7 @@
 package loaders
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/holyshared/go-graphql-server/graph/model"
@@ -32,6 +33,7 @@ func NewDefaultUserLoader(db *gorm.DB) *UserLoader {
 			for i, key := range keys {
 				matched, ok := macthedUserRegistry[key]
 				if !ok {
+					errors[i] = fmt.Errorf("UserLoader: user id %s is not found", key)
 					continue
 				}
 				users[i] = &model.User{ID: matched.ID, Name: matched.Name}
