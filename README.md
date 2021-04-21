@@ -27,3 +27,9 @@ package graph
 ```shell
 go generate ./...
 ```
+
+### dataloader
+
+```shell
+go run github.com/vektah/dataloaden UserLoader string *go-graphql-server/graph/model.User
+```
