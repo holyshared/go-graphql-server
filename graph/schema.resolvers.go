@@ -6,53 +6,21 @@ package graph
 import (
 	"context"
 	"fmt"
-	"math/rand"
-
-	domain "github.com/holyshared/go-graphql-server/model"
 
 	"github.com/holyshared/go-graphql-server/graph/generated"
 	"github.com/holyshared/go-graphql-server/graph/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	ormTodo := &domain.Todo{
-		ID:     fmt.Sprintf("T%d", rand.Int()),
-		Text:   input.Text,
-		Done:   false,
-		UserID: input.UserID,
-	}
-	r.DataStore.Create(ormTodo)
-
-	todo := &model.Todo{
-		Text:   ormTodo.Text,
-		ID:     ormTodo.ID,
-		UserID: ormTodo.UserID,
-	}
-	r.todos = append(r.todos, todo)
-	return todo, nil
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	var todos []domain.Todo
-	dtoTodos := []*model.Todo{}
-
-	r.DataStore.Find(&todos)
-
-	for _, t := range todos {
-		dtoTodos = append(dtoTodos, &model.Todo{
-			ID:     t.ID,
-			Text:   t.Text,
-			Done:   t.Done,
-			UserID: t.UserID,
-		})
-	}
-	r.todos = dtoTodos
-
-	return r.todos, nil
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	return &model.User{ID: obj.UserID, Name: "user " + obj.UserID}, nil
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns generated.MutationResolver implementation.
